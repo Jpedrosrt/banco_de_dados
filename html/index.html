@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulário de usuário</title>
+</head>
+<body>
+  <h1>Formulário de usuário</h1>
+
+  <form id="usuarioForm" action="http://localhost:8081/usuario" method="POST">
+    <label for="cpf">CPF:</label>
+    <input type="number" id="cpf" name="cpf" maxlength="11" oninput="limitarCaracteres(this)">
+  
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome">
+  
+    <label for="dataNascimento">Data de Nascimento:</label>
+    <input type="date" id="dataNascimento" name="data_nascimento">
+  
+    <button type="submit">Enviar</button>
+  </form>
+
+  <button onclick="getData()">Obter Dados</button>
+
+  <div id="dadosUsuario"></div>
+
+  <script>
+    function getData() {
+
+        fetch('http://localhost:8081/dados-usuario')
+            .then(response => response.json())
+            .then(data => {
+                const dadosUsuario = document.getElementById('dadosUsuario');
+                let html = '';
+            
+                data.forEach(usuario => {
+                    html += `Nome: ${usuario.nome}, CPF: ${usuario.cpf}, Data de nascimento: ${usuario.data_nascimento}<br>`;
+                });
+
+                dadosUsuario.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+    }
+    function limitarCaracteres(elemento) {
+        const limite = parseInt(elemento.getAttribute('maxlength'));
+        if (elemento.value.length > limite) {
+            elemento.value = elemento.value.slice(0, limite);
+        }
+    }
+
+  </script>
+</body>
+</html>
