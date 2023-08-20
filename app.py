@@ -35,4 +35,3 @@ def criar_usuario():
     return jsonify({'mensagem': 'Usuário criado com sucesso'}), 201
 
 app.run(host='0.0.0.0', port=3333, debug=True)
-
