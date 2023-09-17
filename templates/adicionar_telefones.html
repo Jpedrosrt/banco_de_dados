@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adicionar Telefones</title>
+</head>
+<body>
+    <h1>Adicionar Telefones</h1>
+    <form action="{{ url_for('adicionar_telefones', id_dados_pessoais=id_dados_pessoais) }}" method="post">
+        {% for i in range(num_telefones) %}
+            <label for="telefone">Telefone {{ i+1 }}:</label>
+            <input type="text" id="telefone" name="telefone{{ i }}" required><br>
+        {% endfor %}
+        <button type="button" onclick="adicionarCampo()">Adicionar Telefone</button>
+        <input type="submit" value="Enviar">
+    </form>
+
+    <script>
+        function adicionarCampo() {
+            var form = document.querySelector('form');
+            var numCampos = document.querySelectorAll('input[type="text"]').length;
+            var novoCampo = document.createElement('input');
+            novoCampo.type = 'text';
+            novoCampo.name = 'telefone' + numCampos;
+            novoCampo.required = true;
+            novoCampo.placeholder = 'Telefone ' + (numCampos + 1);
+            form.insertBefore(novoCampo, form.querySelector('input[type="submit"]'));
+        }
+    </script>
+</body>
+</html>

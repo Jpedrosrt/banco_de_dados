@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Funcionário</title>
+</head>
+<body>
+    <h1>Detalhes do Funcionário</h1>
+    <h2>Funcionário</h2>
+    <ul>
+        <li>ID: {{ funcionario[0] }}</li>
+    </ul>
+    <h2>Dados Pessoais</h2>
+    <ul>
+        <li>ID: {{ funcionario[1] }}</li>
+        <li>CPF: {{ funcionario[2] }}</li>
+        <li>Gênero: {{ funcionario[3] }}</li>
+        <li>Estado Civil: {{ funcionario[4] }}</li>
+        <li>Data de Nascimento: {{ funcionario[5] }}</li>
+        <li>Nome Completo: {{ funcionario[6] }}</li>
+        <li>Idade: {{ funcionario[7] }}</li>
+        <li>Email: {{ funcionario[8] }}</li>
+        <li>id_funcionario: {{funcionario[9]}}</li>
+        <li>id_dependetes: {{funcionario[10]}}</li>
+    </ul>
+
+    <h2>Telefones</h2>
+    <ul>
+        {% for telefone in funcionario[18:] %}
+            <li>ID: {{ telefone[0] }} - Número: {{ telefone[1] }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Endereço</h2>
+    <ul>
+        <li>ID: {{ funcionario[11] }}</li>
+        <li>Logradouro: {{ funcionario[12] }}</li>
+        <li>CEP: {{ funcionario[13] }}</li>
+        <li>Complemento: {{ funcionario[14] }}</li>
+        <li>Número: {{ funcionario[15] }}</li>
+        <li>Bairro: {{ funcionario[16] }}</li>
+        <li>Dados Pessoais ID: {{ funcionario[17] }}</li>
+    </ul>
+</body>
+</html>

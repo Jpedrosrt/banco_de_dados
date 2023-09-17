@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultar Funcionários</title>
 </head>
 <body>
     <h1>Consultar Funcionários</h1>
-    <ul>
-        {% for resultado in resultados %}
-            <li>{{ resultado }}</li>
-        {% endfor %}
-    </ul>
+    <form action="{{ url_for('consultar_funcionarios') }}" method="post">
+        <label for="id_funcionario">ID do Funcionário:</label>
+        <input type="text" id="id_funcionario" name="id_funcionario" required><br>
+        <input type="submit" value="Consultar">
+    </form>
 </body>
 </html>
