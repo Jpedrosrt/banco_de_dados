@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inserir Dados Pessoais</title>
+</head>
+<body>
+    <h1>Inserir Dados Pessoais</h1>
+    <form action="/inserir_dados_pessoais" method="post">
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required><br>
+
+        <label for="genero">Gênero:</label>
+        <input type="text" id="genero" name="genero" required><br>
+
+        <label for="estado_civil">Estado Civil:</label>
+        <input type="text" id="estado_civil" name="estado_civil" required><br>
+
+        <label for="data_de_nascimento">Data de Nascimento:</label>
+        <input type="date" id="data_de_nascimento" name="data_de_nascimento" required><br>
+
+        <label for="nome_completo">Nome Completo:</label>
+        <input type="text" id="nome_completo" name="nome_completo" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="funcionarios_id">ID do Funcionário:</label>
+        <input type="text" id="funcionarios_id" name="funcionarios_id"><br>
+        
+        <label for="dependentes_id">ID do Dependente:</label>
+        <input type="text" id="dependentes_id" name="dependentes_id" ><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
