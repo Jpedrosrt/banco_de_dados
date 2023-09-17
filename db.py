@@ -31,17 +31,13 @@ class MeuProgramaPG:
     def consultar_tabela(self, tabela):
         cursor = self.conn.cursor()
         try:
-            consulta_sql = f"SELECT * FROM RH.{tabela};"
+            consulta_sql = f"SELECT * FROM rh.{tabela};"
             cursor.execute(consulta_sql)
             resultados = cursor.fetchall()
-            if resultados:
-                print(f"Resultados da tabela RH.{tabela}:")
-                for row in resultados:
-                    print(row)
-            else:
-                print(f"A tabela RH.{tabela} está vazia.")
+            return resultados
         except psycopg2.Error as e:
-            print(f"Erro ao consultar a tabela RH.{tabela}: {e}")
+            print(f"Erro ao consultar a tabela rh.{tabela}: {e}")
+            return None
         finally:
             cursor.close()
 

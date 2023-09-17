@@ -19,7 +19,16 @@ programa = MeuProgramaPG(
 def index():
     return render_template('index.html')
 
-# ...
+# Rota para a página de inserção de funcionarios
+@app.route('/inserir_funcionaro', methods=['GET', 'POST'])
+def inserir_cargo():
+    if request.method == 'POST':
+        valores = (
+            request.form['nome_do_cargo']
+        )
+        programa.inserir_linha('cargo', valores)
+        return redirect('/')
+    return render_template('inserir_cargo.html')
 
 @app.route('/inserir_dados_pessoais', methods=['GET', 'POST'])
 def inserir_dados_pessoais():
@@ -68,9 +77,12 @@ def associar_funcionario_cargo():
 
 # Rota para a página de consulta de funcionários
 @app.route('/consultar_funcionarios')
-def consultar_funcionarios():
+def consultar_dados_pessoais():
     resultados = programa.consultar_tabela('dados_pessoais')
-    return render_template('consultar_funcionarios.html', resultados=resultados)
+    if resultados is not None:
+        return render_template('consultar_funcionarios.html', resultados=resultados)
+    else:
+        return render_template('sem_resultados.html')
 
 # Rota para a página de consulta de cargos
 @app.route('/consultar_cargos')
