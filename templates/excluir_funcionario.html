@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excluir Funcionários</title>
+</head>
+<body>
+    <h1>Excluir Funcionários</h1>
+    <form action="{{ url_for('excluir_funcionarios') }}" method="post">
+        <label for="id_funcionario">ID do Funcionário:</label>
+        <input type="text" id="id_funcionario" name="id_funcionario" required><br>
+        <input type="submit" value="Excluir">
+    </form>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adicionar Telefones</title>
+</head>
+<body>
+    <h1>Adicionar Telefones</h1>
+    <form action="{{ url_for('alterar_dados_telefone', id_dados_pessoais=id_dados_pessoais) }}" method="post">
+        {% for i in range(num_telefones) %}
+            <label for="telefone">Telefone {{ i+1 }}:</label>
+            <input type="text" id="telefone" name="telefone{{ i }}" required><br>
+        {% endfor %}
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

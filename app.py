@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect
+import json
 
-# Importe sua classe MeuProgramaPG do arquivo db.py
 from db import MeuProgramaPG
 
 app = Flask(__name__, template_folder='templates')
 
-# Conexão com o banco de dados
 programa = MeuProgramaPG(
     host="localhost",
     dbname="postgres",
@@ -14,13 +13,11 @@ programa = MeuProgramaPG(
     port="5432"
 )
     
-
-# Rota para a página inicial
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Rota para a página de inserção de funcionarios
+
 @app.route('/adicionar_funcionario')
 def adicionar_funcionario():
 
@@ -102,6 +99,104 @@ def consultar_funcionarios():
         else:
             return "Funcionário não encontrado."
     return render_template('consultar_funcionarios.html')
+
+@app.route('/excluir_funcionario', methods=['GET', 'POST'])
+def excluir_funcionarios():
+    if request.method == 'POST':
+        id_funcionario = request.form.get('id_funcionario')
+        funcionario = programa.excluir_funcionario(id_funcionario)
+        if funcionario:
+            return redirect('/')
+        else:
+            return "Funcionário não encontrado."
+    return render_template('excluir_funcionario.html')
+
+@app.route('/alterar_dados', methods=['GET', 'POST'])
+def alterar_dados():
+    if request.method == 'POST':
+        id_funcionario = request.form.get('id_funcionario')
+        table = request.form.get('table_choice')
+        
+        if id_funcionario is not None:
+            if table is not None:
+                if table == 'dados_pessoais':
+                    return redirect(f'/alterar_dados_dados_pessoais/{id_funcionario}')
+                elif table == 'telefone':
+                    id_dados_pessoais = programa.obter_id_dados_pessoais(id_funcionario)
+                    return redirect(f"/alterar_dados_telefone/{id_dados_pessoais}")
+                elif table == 'endereco':
+                    id_dados_pessoais = programa.obter_id_dados_pessoais(id_funcionario)
+                    return redirect(f"/alterar_dados_endereco/{id_dados_pessoais}")
+                else:
+                    return "Tabela inválida."
+        else:
+            return "Funcionário não encontrado."
+    return render_template('alterar_dados.html')
+
+@app.route('/alterar_dados_dados_pessoais/<int:id_funcionario>', methods=['GET', 'POST'])
+def alterar_dados_dados_pessoais(id_funcionario):
+    if request.method == 'POST':
+        valores = (
+            request.form['cpf'],
+            request.form['genero'],
+            request.form['estado_civil'],
+            request.form['data_de_nascimento'],
+            request.form['nome_completo'],
+            request.form['email'],
+        )
+
+        sucesso = programa.atualizar_dados('dados_pessoais', id_funcionario, valores)
+
+        if sucesso:
+            return redirect('/')
+
+        else:
+            return "Erro ao atualizar dados. Por favor, tente novamente."
+
+    return render_template('alterar_dados_dados_pessoais.html', id_funcionario=id_funcionario)
+
+
+@app.route('/alterar_dados_telefone/<int:id_dados_pessoais>', methods=['GET', 'POST'])
+def alterar_dados_telefone(id_dados_pessoais):
+    num = programa.contar_itens_por_id('telefone', 'dados_pessoais_id', id_dados_pessoais)
+    tel_id = programa.obter_ids_telefones(id_dados_pessoais)
+    count = 0
+    if request.method == 'POST':
+        
+        
+        num_telefones = len(request.form)
+        telefones = [request.form[f'telefone{i}'] for i in range(num_telefones)]
+
+        for telefone in telefones:
+            print(telefone)
+            print(tel_id)
+            id_telefone = programa.atualizar_dados('telefone',tel_id[count], telefone)
+            count = count + 1
+            if id_telefone is None:
+                return "Erro ao adicionar telefone. Por favor, tente novamente."
+
+        return redirect(f'/')
+
+    return render_template('alterar_dados_telefone.html', id_dados_pessoais=id_dados_pessoais, num_telefones=num)
+
+@app.route('/alterar_dados_endereco/<int:id_dados_pessoais>', methods=['GET', 'POST'])
+def alterar_dados_endereco(id_dados_pessoais):
+    if request.method == 'POST':
+        valores = (
+            request.form['lagradouro'],
+            request.form['cep'],
+            request.form['complemento'],
+            request.form['numero'],
+            request.form['bairro'],
+        )
+
+        id_endereco = programa.atualizar_dados('endereco', id_dados_pessoais, valores)
+        if id_endereco is not None:
+            return redirect('/')
+        else:
+            return "Erro ao adicionar endereço. Por favor, tente novamente."
+
+    return render_template('alterar_dados_edereco.html', id_dados_pessoais=id_dados_pessoais)
 
 
 if __name__ == '__main__':

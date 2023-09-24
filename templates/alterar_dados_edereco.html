@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adicionar Endereço</title>
+</head>
+<body>
+    <h1>Adicionar Endereço</h1>
+    <form action="/alterar_dados_endereco/{{id_dados_pessoais}}" method="post">
+        <label for="lagradouro">Logradouro:</label>
+        <input type="text" id="lagradouro" name="lagradouro" required><br>
+
+        <label for="cep">CEP:</label>
+        <input type="text" id="cep" name="cep" required><br>
+
+        <label for="complemento">Complemento:</label>
+        <input type="text" id="complemento" name="complemento" required><br>
+
+        <label for="numero">Número:</label>
+        <input type="text" id="numero" name="numero" required><br>
+
+        <label for="bairro">Bairro:</label>
+        <input type="text" id="bairro" name="bairro" required><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

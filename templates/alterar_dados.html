@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alterar Dados</title>
+    <script>
+        function mostrarOpcoes() {
+            var idFuncionario = document.getElementById('id_funcionario').value;
+            var opcoes = document.getElementById('opcoes');
+            if (opcoes) {
+                opcoes.innerHTML = `
+                    <label for="table_choice">Escolha a tabela:</label>
+                    <select id="table_choice" name="table_choice" required>
+                        <option value="dados_pessoais">Dados Pessoais</option>
+                        <option value="telefone">Telefone</option>
+                        <option value="endereco">Endereço</option>
+                    </select><br>
+                    <input type="hidden" name="id_funcionario" value="${idFuncionario}">
+                    <input type="submit" value="Escolher">
+                `;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Alterar Dados</h1>
+    <form action="{{ url_for('alterar_dados') }}" method="post">
+        <label for="id_funcionario">ID do Funcionário:</label>
+        <input type="text" id="id_funcionario" name="id_funcionario" required><br>
+        <button type="button" onclick="mostrarOpcoes()">Escolher Tabela</button>
+        <div id="opcoes"></div>
+    </form>
+</body>
+</html>
