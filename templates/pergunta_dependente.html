@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Pergunta sobre Dependente</title>
+</head>
+<body>
+    <h1>Tem dependente?</h1>
+    <form action="/processar_dependente/{{id_funcionario}}" method="post">
+        <label>
+            <input type="radio" name="tem_dependente" value="sim"> Sim
+        </label>
+        <label>
+            <input type="radio" name="tem_dependente" value="nao"> Não
+        </label>
+        <br>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

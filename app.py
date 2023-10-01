@@ -53,6 +53,31 @@ def adicionar_dados(id_funcionario):
         
     return render_template('adicionar_dados_pessoais.html', id_funcionario=id_funcionario)
 
+@app.route('/adicionar_dados_dependente/<int:id_dependente>', methods=['GET', 'POST'])
+def adicionar_dados_dependente(id_dependente):
+
+    if request.method == 'POST':
+        valores = (
+            request.form['cpf'],
+            request.form['genero'],
+            request.form['estado_civil'],
+            request.form['data_de_nascimento'],
+            request.form['nome_completo'],
+            request.form['email'],
+            None,  
+            id_dependente 
+        )
+
+        id_dados_pessoais = programa.adicionar_dados('dados_pessoais', valores)
+        if id_dados_pessoais is not None:
+            print(id_dados_pessoais)
+            return redirect(f'/adicionar_telefones/{id_dados_pessoais}')
+        else:
+            return "Erro ao adicionar dados. Por favor, tente novamente."
+        
+    return render_template('adicionar_dados_dependente.html', id_dependente=id_dependente)
+
+
 @app.route('/adicionar_telefones/<int:id_dados_pessoais>', methods=['GET', 'POST'])
 def adicionar_telefones(id_dados_pessoais):
     if request.method == 'POST':
@@ -81,13 +106,47 @@ def adicionar_enderecos(id_dados_pessoais):
         )
 
         id_endereco = programa.adicionar_endereco(valores_endereco)
-        if id_endereco is not None:
+        id_funcionario = programa.obter_id_funcionario(id_dados_pessoais)
+        if id_endereco is not None and id_funcionario is not None:
+            return redirect(f'/pergunta_dependente/{id_funcionario}')
+        else:
             programa.conn.commit()
             return redirect('/')
-        else:
-            return "Erro ao adicionar endereço. Por favor, tente novamente."
 
     return render_template('adicionar_enderecos.html', id_dados_pessoais=id_dados_pessoais)
+
+@app.route('/pergunta_dependente/<int:id_funcionario>')
+def pergunta_dependente(id_funcionario):
+    return render_template('pergunta_dependente.html', id_funcionario=id_funcionario)
+
+@app.route('/processar_dependente/<int:id_funcionario>', methods=['POST'])
+def processar_dependente(id_funcionario):
+    tem_dependente = request.form.get('tem_dependente')
+    
+    if tem_dependente == 'sim':
+        return redirect(f'/adicionar_dependente/{id_funcionario}')
+    elif tem_dependente == 'nao':
+        programa.conn.commit()
+        return redirect('/')
+    else:
+        return "Resposta inválida."
+
+@app.route('/adicionar_dependente/<int:id_funcionario>')
+def adicionar_dependente(id_funcionario):
+    id_dependente = programa.adicionar_dependente()
+    print(id_dependente)
+    if id_dependente is not None:
+        sucesso = programa.associar_dependente_funcionario(id_funcionario, id_dependente)
+        if sucesso:
+            programa.conn.commit()
+            return redirect(f'/adicionar_dados_dependente/{id_dependente}')
+        else:
+            return "Erro ao associar dependente ao funcionário. Por favor, tente novamente."
+    else:
+        return "Erro ao adicionar dependente. Por favor, tente novamente."
+
+
+
 
 @app.route('/consultar_funcionarios', methods=['GET', 'POST'])
 def consultar_funcionarios():
@@ -197,6 +256,57 @@ def alterar_dados_endereco(id_dados_pessoais):
             return "Erro ao adicionar endereço. Por favor, tente novamente."
 
     return render_template('alterar_dados_edereco.html', id_dados_pessoais=id_dados_pessoais)
+
+@app.route('/consultas')
+def consultas():
+    return render_template('consultas.html')
+
+@app.route('/executar_consulta', methods=['POST'])
+def executar_consulta():
+    consulta_selecionada = request.form.get('consulta')
+    
+    if consulta_selecionada == 'consulta_like':
+        return redirect('/consulta_like')
+    elif consulta_selecionada == 'consulta_conjuntos':
+        return redirect('/consulta_conjuntos')
+    elif consulta_selecionada == 'consulta_join':
+        return redirect('/consulta_join')
+    elif consulta_selecionada == 'consulta_multi_join':
+        return redirect('/consulta_multi_join')
+    elif consulta_selecionada == 'consulta_outer_join':
+        return redirect('/consulta_outer_join')
+    elif consulta_selecionada == 'consulta_agregacao':
+        return redirect('/consulta_agregacao')
+    elif consulta_selecionada == 'consulta_group_by':
+        return redirect('/consulta_group_by')
+    elif consulta_selecionada == 'consulta_group_by_having':
+        return redirect('/consulta_group_by_having')
+    elif consulta_selecionada == 'consulta_in':
+        return redirect('/consulta_in')
+    elif consulta_selecionada == 'consulta_exists':
+        return redirect('/consulta_exists')
+    elif consulta_selecionada == 'consulta_some':
+        return redirect('/consulta_some')
+    elif consulta_selecionada == 'consulta_all':
+        return redirect('/consulta_all')
+    elif consulta_selecionada == 'consulta_aninhada':
+        return redirect('/consulta_aninhada')
+
+    return "Consulta não encontrada"
+
+@app.route('/consulta_like', methods=['POST', 'GET'])
+def consulta_like():
+    if request.method == 'POST':
+        id_funcionario = request.form['id_funcionario']
+        ddd = request.form['ddd']
+
+        telefones = programa.consultar_telefones_like(id_funcionario, ddd)
+
+        if telefones is not None:
+            return render_template('resultados_consulta_like.html', telefones=telefones)
+        else:
+            return "Erro ao consultar telefones com LIKE. Por favor, tente novamente."
+    return render_template('consulta_like.html')
 
 
 if __name__ == '__main__':

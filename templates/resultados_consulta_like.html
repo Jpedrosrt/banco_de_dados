@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados da Consulta com LIKE</title>
+</head>
+<body>
+    <h1>Resultados da Consulta com LIKE</h1>
+    <ul>
+        {% for telefone in telefones %}
+            <li>{{ telefone[0] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

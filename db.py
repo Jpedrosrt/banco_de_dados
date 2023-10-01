@@ -22,6 +22,32 @@ class MeuProgramaPG:
             return None
         finally:
             cursor.close()
+    
+    def adicionar_dependente(self):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute("INSERT INTO RH.dependentes DEFAULT VALUES RETURNING id;")
+            id_dependente = cursor.fetchone()[0]
+            return id_dependente
+        except psycopg2.Error as e:
+            print(f"Erro ao adicionar dependente: {e}")
+            self.conn.rollback()
+            return None
+        finally:
+            cursor.close()
+    
+    def associar_dependente_funcionario(self, id_funcionario, id_dependente):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute("INSERT INTO RH.funcionarios_dependentes (funcionarios_id, dependentes_id) VALUES (%s, %s);", (id_funcionario, id_dependente))
+            self.conn.commit()
+            return True
+        except psycopg2.Error as e:
+            print(f"Erro ao associar dependente ao funcionário: {e}")
+            self.conn.rollback()
+            return False
+        finally:
+            cursor.close()
 
     def adicionar_dados(self, tabela, valores):
         cursor = self.conn.cursor()
@@ -138,6 +164,17 @@ class MeuProgramaPG:
         finally:
 
             cursor.close()
+
+    def obter_id_funcionario(self, id_dados_pessoais):
+        cursor = self.conn.cursor()
+        query = "SELECT funcionarios_id FROM RH.dados_pessoais WHERE id = %s"
+        cursor.execute(query, (id_dados_pessoais,))
+        id_funcionario = cursor.fetchone()
+
+        if id_funcionario:
+            return id_funcionario[0]
+
+        return None
     
     def obter_id_dados_pessoais(self, id_funcionario):
         cursor = self.conn.cursor()
@@ -174,6 +211,26 @@ class MeuProgramaPG:
 
         finally:
             cursor.close()
+    
+    def consultar_telefones_like(self, id_funcionario, ddd):
+        cursor = self.conn.cursor()
+
+        try:
+            cursor.execute("SELECT id FROM RH.dados_pessoais WHERE funcionarios_id = %s;", (id_funcionario,))
+            id_dados_pessoais = cursor.fetchone()[0]
+            
+            cursor.execute("SELECT telefone FROM RH.telefone WHERE dados_pessoais_id = %s AND telefone LIKE %s;", (id_dados_pessoais, f'{ddd}%'))
+            telefones = cursor.fetchall()
+
+            return telefones
+
+        except psycopg2.Error as e:
+            print(f"Erro ao consultar telefones com LIKE: {e}")
+            return None
+
+        finally:
+            cursor.close()
+
 
 
 
