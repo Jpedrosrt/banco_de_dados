@@ -2,12 +2,55 @@
 <html>
 <head>
     <title>Excluir Funcionários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin: 0 auto;
+            max-width: 400px;
+        }
+
+        label, input {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #DC3545;
+            color: #FFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #C82333;
+        }
+    </style>
 </head>
 <body>
     <h1>Excluir Funcionários</h1>
     <form action="{{ url_for('excluir_funcionarios') }}" method="post">
         <label for="id_funcionario">ID do Funcionário:</label>
-        <input type="text" id="id_funcionario" name="id_funcionario" required><br>
+        <input type="text" id="id_funcionario" name="id_funcionario" required>
         <input type="submit" value="Excluir">
     </form>
 </body>

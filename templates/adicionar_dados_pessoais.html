@@ -1,32 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Adicionar Dados Pessoais</title>
+    <title>Dados Pessoais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin: 0 auto;
+            max-width: 400px;
+        }
+
+        label, input {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center; /* Centraliza o texto */
+        }
+
+        input[type="submit"] {
+            display: block;
+            margin: 20px auto;  /* Centraliza o botão */
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #FFF;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #FFF;
+            background-color: #6c757d;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+    </style>
 </head>
 <body>
     <h1>Adicionar Dados Pessoais</h1>
     <form action="{{ url_for('adicionar_dados', id_funcionario=id_funcionario) }}" method="post">
         
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" name="cpf" required><br>
+        <input type="text" id="cpf" name="cpf" required>
 
         <label for="genero">Gênero:</label>
-        <input type="text" id="genero" name="genero" required><br>
+        <input type="text" id="genero" name="genero" required>
 
         <label for="estado_civil">Estado Civil:</label>
-        <input type="text" id="estado_civil" name="estado_civil" required><br>
+        <input type="text" id="estado_civil" name="estado_civil" required>
 
         <label for="data_de_nascimento">Data de Nascimento:</label>
-        <input type="date" id="data_de_nascimento" name="data_de_nascimento" required><br>
+        <input type="date" id="data_de_nascimento" name="data_de_nascimento" required>
 
         <label for="nome_completo">Nome Completo:</label>
-        <input type="text" id="nome_completo" name="nome_completo" required><br>
+        <input type="text" id="nome_completo" name="nome_completo" required>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
+        <input type="email" id="email" name="email" required>
 
         <input type="submit" value="Enviar">
-        <a href="/" class="btn btn-secondary">Cancelar</a>
+        <a href="/" class="btn-secondary">Cancelar</a>
     </form>
 </body>
 </html>
