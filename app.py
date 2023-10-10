@@ -267,30 +267,13 @@ def executar_consulta():
     if consulta_selecionada == 'consulta_like':
         return redirect('/consulta_like')
     elif consulta_selecionada == 'consulta_conjuntos':
-        return redirect('/consulta_conjuntos')
-    elif consulta_selecionada == 'consulta_join':
-        return redirect('/consulta_join')
+        return redirect('/consulta_conjunto')
     elif consulta_selecionada == 'consulta_multi_join':
         return redirect('/consulta_multi_join')
     elif consulta_selecionada == 'consulta_outer_join':
         return redirect('/consulta_outer_join')
     elif consulta_selecionada == 'consulta_agregacao':
         return redirect('/consulta_agregacao')
-    elif consulta_selecionada == 'consulta_group_by':
-        return redirect('/consulta_group_by')
-    elif consulta_selecionada == 'consulta_group_by_having':
-        return redirect('/consulta_group_by_having')
-    elif consulta_selecionada == 'consulta_in':
-        return redirect('/consulta_in')
-    elif consulta_selecionada == 'consulta_exists':
-        return redirect('/consulta_exists')
-    elif consulta_selecionada == 'consulta_some':
-        return redirect('/consulta_some')
-    elif consulta_selecionada == 'consulta_all':
-        return redirect('/consulta_all')
-    elif consulta_selecionada == 'consulta_aninhada':
-        return redirect('/consulta_aninhada')
-
     return "Consulta não encontrada"
 
 @app.route('/consulta_like', methods=['POST', 'GET'])
@@ -306,6 +289,47 @@ def consulta_like():
         else:
             return "Erro ao consultar telefones com LIKE. Por favor, tente novamente."
     return render_template('consulta_like.html')
+
+@app.route('/consulta_conjunto', methods=['POST','GET'])
+def selecionar_funcionario():
+    if request.method == 'POST':
+        id_funcionario = request.form['id_funcionario']
+        enderecos = programa.comparar_enderecos(id_funcionario)
+        if enderecos is not None:
+            return render_template('resultados_comparar_enderecos.html', enderecos=enderecos)
+        else:
+            return "Erro ao consultar endereços. Por favor, tente novamente."
+    return render_template('consulta_conjunto.html')
+
+@app.route('/consulta_multi_join', methods=['POST', 'GET'])
+def consulta_multi_join():
+    if request.method == 'POST':
+        funcionarios_dados_telefone = programa.consulta_multi_join()
+        if funcionarios_dados_telefone is not None:
+            return render_template('resultados_multi_join.html', funcionarios_dados_telefone=funcionarios_dados_telefone)
+        else:
+            return "Erro ao consultar dados. Por favor, tente novamente."
+    return render_template('consulta_multi_join.html')
+
+@app.route('/consulta_outer_join', methods=['POST', 'GET'])
+def consulta_outer_join():
+    if request.method == 'POST':
+        dados_funcionarios = programa.consulta_outer_join()
+        if dados_funcionarios is not None:
+            return render_template('resultados_outer_join.html', dados_funcionarios=dados_funcionarios)
+        else:
+            return "Erro ao consultar dados. Por favor, tente novamente."
+    return render_template('consulta_outer_join.html')
+
+@app.route('/consulta_agregacao', methods=['POST', 'GET'])
+def consulta_agregacao():
+    if request.method == 'POST':
+        media_idades = programa.calcular_media_idades()
+        if media_idades is not None:
+            return render_template('resultados_agregacao.html', media_idades=media_idades)
+        else:
+            return "Erro ao calcular média de idades. Por favor, tente novamente."
+    return render_template('consulta_agregacao.html')
 
 
 if __name__ == '__main__':

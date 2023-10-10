@@ -231,6 +231,94 @@ class MeuProgramaPG:
         finally:
             cursor.close()
 
+    def comparar_enderecos(self, id_funcionario):
+        cursor = self.conn.cursor()
+
+        try:
+            cursor.execute("SELECT endereco.lagradouro, endereco.cep, endereco.complemento, endereco.numero, endereco.bairro \
+                            FROM RH.endereco \
+                            JOIN RH.dados_pessoais ON endereco.dados_pessoais_id = dados_pessoais.id \
+                            JOIN RH.funcionarios ON dados_pessoais.funcionarios_id = funcionarios.id \
+                            WHERE funcionarios.id = %s \
+                            UNION \
+                            SELECT endereco.lagradouro, endereco.cep, endereco.complemento, endereco.numero, endereco.bairro \
+                            FROM RH.endereco \
+                            JOIN RH.dados_pessoais ON endereco.dados_pessoais_id = dados_pessoais.id \
+                            JOIN RH.funcionarios_dependentes ON dados_pessoais.dependentes_id = funcionarios_dependentes.dependentes_id \
+                            JOIN RH.funcionarios ON funcionarios_dependentes.funcionarios_id = funcionarios.id \
+                            WHERE funcionarios.id = %s;", (id_funcionario, id_funcionario))
+            enderecos = cursor.fetchall()
+
+            return enderecos
+
+        except psycopg2.Error as e:
+            print(f"Erro ao comparar endereços: {e}")
+            return None
+
+        finally:
+            cursor.close()
+
+    def consulta_multi_join(self):
+        cursor = self.conn.cursor()
+
+        try:
+            cursor.execute("SELECT funcionarios.id, dados_pessoais.nome_completo, telefone.telefone \
+                            FROM RH.funcionarios \
+                            JOIN RH.dados_pessoais ON funcionarios.id = dados_pessoais.funcionarios_id \
+                            JOIN RH.telefone ON dados_pessoais.id = telefone.dados_pessoais_id;")
+            funcionarios_dados_telefone = cursor.fetchall()
+
+            return funcionarios_dados_telefone
+
+        except psycopg2.Error as e:
+            print(f"Erro ao consultar dados: {e}")
+            return None
+
+        finally:
+            cursor.close()
+
+    def consulta_outer_join(self):
+        cursor = self.conn.cursor()
+
+        try:
+            cursor.execute("SELECT dados_pessoais.id, dados_pessoais.nome_completo, dados_pessoais.dependentes_id, funcionarios.id \
+                            FROM RH.dados_pessoais \
+                            LEFT OUTER JOIN RH.funcionarios ON dados_pessoais.funcionarios_id = funcionarios.id;")
+            dados_funcionarios = cursor.fetchall()
+
+            return dados_funcionarios
+
+        except psycopg2.Error as e:
+            print(f"Erro ao consultar dados: {e}")
+            return None
+
+        finally:
+            cursor.close()
+
+    def calcular_media_idades(self):
+        cursor = self.conn.cursor()
+
+        try:
+            cursor.execute("SELECT nome_completo, idade, \
+                            (SELECT AVG(idade) FROM RH.dados_pessoais) as media_idades \
+                            FROM RH.dados_pessoais;")
+            dados_com_media = cursor.fetchall()
+
+            print(dados_com_media)
+            return dados_com_media
+
+        except psycopg2.Error as e:
+            print(f"Erro ao calcular média de idades por nome: {e}")
+            return None
+
+        finally:
+            cursor.close()
+
+
+
+
+
+
 
 
 

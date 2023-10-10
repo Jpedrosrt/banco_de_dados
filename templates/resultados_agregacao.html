@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados Agregação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: #FFF;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultados Agregação</h1>
+    <table>
+        <tr>
+            <th>Nome Completo</th>
+            <th>Idade</th>
+            <th>Média de Idades</th>
+        </tr>
+        {% for dados in media_idades %}
+            <tr>
+                <td>{{ dados[0] }}</td>
+                <td>{{ dados[1] }}</td>
+                <td>{{ dados[2]|round(2) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
